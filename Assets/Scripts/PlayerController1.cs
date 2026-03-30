@@ -1,31 +1,33 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController1 : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
 
     private Rigidbody2D rb;
-    private InputAction moveAction;
-    private InputAction jumpAction;
     private bool isGrounded;
+    private float moveInput;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        moveAction = playerInput.actions["Move"];
-        jumpAction = playerInput.actions["Jump"];
     }
 
     void Update()
     {
-        float move = moveAction.ReadValue<Vector2>().x;
-        rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
+        if (Keyboard.current.aKey.isPressed) moveInput = -1;
+        else if (Keyboard.current.dKey.isPressed) moveInput = 1;
+        else moveInput = 0;
 
-        if (jumpAction.WasPressedThisFrame() && isGrounded)
+        if (Keyboard.current.wKey.wasPressedThisFrame && isGrounded)
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
     }
 
     void OnCollisionEnter2D(Collision2D col)
