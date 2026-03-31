@@ -1,4 +1,5 @@
 using ChristinaCreatesGames.Animations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -69,14 +70,33 @@ public class PlayerController : MonoBehaviour
                 onOtherSheep = true;
             }
         }
+
+        if (col.gameObject.CompareTag("Disintegrating"))
+        {
+            float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
+            float sheepBottom = transform.position.y - transform.localScale.y / 2;
+            if (sheepBottom > topEdge)
+            {
+                col.gameObject.SetActive(false);
+            }
+        }
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Platform"))
         {
             isGrounded = false;
-            onOtherSheep = false;
+        }
+
+        if (col.gameObject.CompareTag("Player"))
+        {
+
+            if (transform.position.y > col.transform.position.y)
+            {
+                isGrounded = false;
+                onOtherSheep = false;
+            }
         }
     }
 }
