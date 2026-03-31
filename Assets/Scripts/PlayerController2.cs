@@ -2,8 +2,10 @@ using ChristinaCreatesGames.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController2 : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+    public enum ControlScheme { WASD, Arrows }
+    [SerializeField] private ControlScheme controlScheme;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 5f;
@@ -22,16 +24,31 @@ public class PlayerController2 : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.leftArrowKey.isPressed) moveInput = -1;
-        else if (Keyboard.current.rightArrowKey.isPressed) moveInput = 1;
-        else moveInput = 0;
-
-        if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
+        if (controlScheme == ControlScheme.WASD)
         {
-            float force = onOtherSheep ? boostedJumpForce : jumpForce;
-            rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
-            squashAndStretch.PlaySquashAndStretch();
+            if (Keyboard.current.aKey.isPressed) moveInput = -1;
+            else if (Keyboard.current.dKey.isPressed) moveInput = 1;
+            else moveInput = 0;
+
+            if (Keyboard.current.wKey.wasPressedThisFrame && isGrounded)
+                Jump();
         }
+        else
+        {
+            if (Keyboard.current.leftArrowKey.isPressed) moveInput = -1;
+            else if (Keyboard.current.rightArrowKey.isPressed) moveInput = 1;
+            else moveInput = 0;
+
+            if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
+                Jump();
+        }
+    }
+
+    void Jump()
+    {
+        float force = onOtherSheep ? boostedJumpForce : jumpForce;
+        rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        squashAndStretch.PlaySquashAndStretch();
     }
 
     void FixedUpdate()
@@ -42,9 +59,7 @@ public class PlayerController2 : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform"))
-        {
             isGrounded = true;
-        }
 
         if (col.gameObject.CompareTag("Player") && !isGrounded)
         {
