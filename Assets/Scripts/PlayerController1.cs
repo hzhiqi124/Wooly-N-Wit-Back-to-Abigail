@@ -7,6 +7,7 @@ public class PlayerController1 : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 15f;
+    [SerializeField] private Animator animator;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -31,6 +32,15 @@ public class PlayerController1 : MonoBehaviour
             float force = onOtherSheep ? boostedJumpForce : jumpForce;
             rb.AddForce(Vector2.up * force, ForceMode2D.Impulse); // was jumpForce, should be force
             squashAndStretch.PlaySquashAndStretch();
+        }
+
+        if (moveInput != 0)
+        {
+            animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
         }
     }
 

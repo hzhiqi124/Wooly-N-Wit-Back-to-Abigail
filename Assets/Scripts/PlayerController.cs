@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 5f;
+    [SerializeField] private Animator animator;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -42,6 +43,15 @@ public class PlayerController : MonoBehaviour
 
             if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
                 Jump();
+        }
+
+        if (moveInput != 0)
+        {
+            animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            animator.SetBool("IsRunning", false);
         }
     }
 
