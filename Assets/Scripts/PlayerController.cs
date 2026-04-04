@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 5f;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator animator; //for character animation
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
                 Jump();
         }
 
+        //for walk animation
         if (moveInput != 0)
         {
             animator.SetBool("IsRunning", true);
