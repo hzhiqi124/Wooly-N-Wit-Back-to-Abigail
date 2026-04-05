@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
         {
             float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
             float sheepBottom = transform.position.y - transform.localScale.y / 2;
+            Debug.Log("topEdge: " + topEdge + " sheepBottom: " + sheepBottom);
             if (sheepBottom > topEdge)
             {
                 col.gameObject.SetActive(false);
