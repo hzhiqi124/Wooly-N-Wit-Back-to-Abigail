@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        animator.SetBool("IsJumping", true); //jump animation
         rb.bodyType = RigidbodyType2D.Dynamic;
         float force = onOtherSheep ? boostedJumpForce : jumpForce;
         rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
@@ -141,7 +142,10 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform"))
+        {
             isGrounded = true;
+            animator.SetBool("IsJumping", false); //jump animation
+        }
 
  
         if (col.gameObject.CompareTag("Player") && !isGrounded)
