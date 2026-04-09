@@ -82,13 +82,17 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rb.bodyType = RigidbodyType2D.Kinematic;
+                transform.position = new Vector3(
+                    ridingTarget.position.x + rideOffset.x,
+                    ridingTarget.position.y + rideOffset.y,
+                    transform.position.z);
                 rb.linearVelocity = Vector2.zero;
-                    transform.position = new Vector3(
-                   ridingTarget.position.x + rideOffset.x,
-                   ridingTarget.position.y + rideOffset.y,
-                   transform.position.z);
-               
             }
+        }
+        else if (rb.bodyType == RigidbodyType2D.Kinematic)
+        {
+            // make sure we always restore dynamic if riding stopped
+            rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }
 
@@ -169,7 +173,7 @@ public class PlayerController : MonoBehaviour
             float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
             float sheepBottom = transform.position.y - transform.localScale.y / 2;
             Debug.Log("topEdge: " + topEdge + " sheepBottom: " + sheepBottom);
-            if (sheepBottom > topEdge)
+            if (sheepBottom >= topEdge - 0.1f)
             {
                 col.gameObject.SetActive(false);
             }
