@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private SquashAndStretch squashAndStretch;
     private Vector3 rideOffset;
     private Transform ridingTarget;
+    private float lastFacingDirection = 1f; //for jump animation
+    private SpriteRenderer spriteRenderer; //for jump animation
 
     public bool isBeingRidden;
 
@@ -30,6 +32,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         squashAndStretch = GetComponent<ChristinaCreatesGames.Animations.SquashAndStretch>();
         audioSource = GetComponent<AudioSource>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>(); // for jump animation
     }
 
     void Update()
@@ -63,14 +67,10 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsRunning", false);
         }
 
-        if (moveInput < 0)
-        {
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-        else if (moveInput > 0)
-        {
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
+        if (moveInput < 0) lastFacingDirection = -1f;
+        else if (moveInput > 0) lastFacingDirection = 1f;
+
+        spriteRenderer.flipX = lastFacingDirection < 0;
 
         if (onOtherSheep && ridingTarget != null)
         {
@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
             animator.SetBool("IsJumping", false); //jump animation
+            animator.SetBool("IsRunning", false); //jump animation 
         }
 
  
