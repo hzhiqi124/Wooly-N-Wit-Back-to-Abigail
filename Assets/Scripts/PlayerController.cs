@@ -140,8 +140,14 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    
 
+    private GameObject disintegratingTarget;
+
+    void DisableDisintegrating()
+    {
+        if (disintegratingTarget != null)
+            disintegratingTarget.SetActive(false);
+    }
 
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -171,12 +177,14 @@ public class PlayerController : MonoBehaviour
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
+            isGrounded = true;
             float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
             float sheepBottom = transform.position.y - transform.localScale.y / 2;
             Debug.Log("topEdge: " + topEdge + " sheepBottom: " + sheepBottom);
             if (sheepBottom >= topEdge - 0.1f)
             {
-                col.gameObject.SetActive(false);
+                disintegratingTarget = col.gameObject;
+                Invoke("DisableDisintegrating", 0.8f);
             }
         }
     }
@@ -198,5 +206,8 @@ public class PlayerController : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Dynamic;
             }
         }
+
+        if (col.gameObject.CompareTag("Disintegrating"))
+            isGrounded = false;
     }
 }
