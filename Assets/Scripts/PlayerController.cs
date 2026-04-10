@@ -1,5 +1,4 @@
 using ChristinaCreatesGames.Animations;
-using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,19 +10,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 5f;
-    [SerializeField] private Animator animator; //for character animation
+    [SerializeField] private Animator animator;
     [SerializeField] private AudioClip bounceSound;
 
     private AudioSource audioSource;
     [HideInInspector] public Rigidbody2D rb;
-    private bool isGrounded;
+    private int groundContactCount = 0;
+    private bool isGrounded => groundContactCount > 0;
     private bool onOtherSheep;
     private float moveInput;
     private SquashAndStretch squashAndStretch;
     private Vector3 rideOffset;
-    private Transform ridingTarget;
-    private float lastFacingDirection = 1f; //for jump animation
-    private SpriteRenderer spriteRenderer; //for jump animation
+    public Transform ridingTarget;
+    private float lastFacingDirection = 1f;
+    private SpriteRenderer spriteRenderer;
+    private GameObject disintegratingTarget;
 
     public bool isBeingRidden;
 
@@ -32,8 +33,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         squashAndStretch = GetComponent<ChristinaCreatesGames.Animations.SquashAndStretch>();
         audioSource = GetComponent<AudioSource>();
-
-        spriteRenderer = GetComponent<SpriteRenderer>(); // for jump animation
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -57,15 +57,10 @@ public class PlayerController : MonoBehaviour
                 Jump();
         }
 
-        //for walk animation
         if (moveInput != 0)
-        {
             animator.SetBool("IsRunning", true);
-        }
         else
-        {
             animator.SetBool("IsRunning", false);
-        }
 
         if (moveInput < 0) lastFacingDirection = -1f;
         else if (moveInput > 0) lastFacingDirection = 1f;
@@ -91,16 +86,14 @@ public class PlayerController : MonoBehaviour
         }
         else if (rb.bodyType == RigidbodyType2D.Kinematic)
         {
-            // make sure we always restore dynamic if riding stopped
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }
 
-    
-
     void Jump()
     {
-        animator.SetBool("IsJumping", true); //jump animation
+        groundContactCount = 0;
+        animator.SetBool("IsJumping", true);
         rb.bodyType = RigidbodyType2D.Dynamic;
         float force = onOtherSheep ? boostedJumpForce : jumpForce;
         rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
@@ -115,7 +108,6 @@ public class PlayerController : MonoBehaviour
             riderRb.bodyType = RigidbodyType2D.Dynamic;
             riderRb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
         }
-            
     }
 
     void FixedUpdate()
@@ -140,9 +132,6 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-
-    private GameObject disintegratingTarget;
-
     void DisableDisintegrating()
     {
         if (disintegratingTarget != null)
@@ -151,19 +140,18 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform"))
+        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Disintegrating"))
         {
-            isGrounded = true;
-            animator.SetBool("IsJumping", false); //jump animation
-            animator.SetBool("IsRunning", false); //jump animation 
+            groundContactCount++;
+            animator.SetBool("IsJumping", false);
+            animator.SetBool("IsRunning", false);
         }
 
- 
         if (col.gameObject.CompareTag("Player") && !isGrounded)
         {
             if (transform.position.y > col.transform.position.y)
             {
-                isGrounded = true;
+                groundContactCount++;
                 onOtherSheep = true;
 
                 if (moveInput == 0)
@@ -171,16 +159,13 @@ public class PlayerController : MonoBehaviour
                     ridingTarget = col.transform;
                     rideOffset = transform.position - col.transform.position;
                 }
-                
             }
         }
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
-            isGrounded = true;
             float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
             float sheepBottom = transform.position.y - transform.localScale.y / 2;
-            Debug.Log("topEdge: " + topEdge + " sheepBottom: " + sheepBottom);
             if (sheepBottom >= topEdge - 0.1f)
             {
                 disintegratingTarget = col.gameObject;
@@ -191,23 +176,18 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform"))
-            isGrounded = false;
-       
+        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Disintegrating"))
+            groundContactCount = Mathf.Max(0, groundContactCount - 1);
 
         if (col.gameObject.CompareTag("Player"))
         {
-
             if (transform.position.y > col.transform.position.y)
             {
-                isGrounded = false;
+                groundContactCount = Mathf.Max(0, groundContactCount - 1);
                 onOtherSheep = false;
                 ridingTarget = null;
                 rb.bodyType = RigidbodyType2D.Dynamic;
             }
         }
-
-        if (col.gameObject.CompareTag("Disintegrating"))
-            isGrounded = false;
     }
 }
