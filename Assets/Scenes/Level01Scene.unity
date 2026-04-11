@@ -10456,7 +10456,7 @@ PrefabInstance:
     - target: {fileID: 3992302628978148259, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 6200000, guid: 31ab9bb1a9703444b94a8ae987ac0456, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5062308545919613292, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.1189
@@ -10500,11 +10500,19 @@ PrefabInstance:
     - target: {fileID: 6172831805319828040, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 6200000, guid: 31ab9bb1a9703444b94a8ae987ac0456, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 6371152474526113299, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8350700584221762932, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
+      propertyPath: normalMaterial
+      value: 
+      objectReference: {fileID: 6200000, guid: 935dff12d186b044a86ef255be37fd49, type: 2}
+    - target: {fileID: 8350700584221762932, guid: e09e8f75928028d40bc3d90b3c52ed69, type: 3}
+      propertyPath: slipperyMaterial
+      value: 
+      objectReference: {fileID: 6200000, guid: 31ab9bb1a9703444b94a8ae987ac0456, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10688,6 +10696,14 @@ PrefabInstance:
     - target: {fileID: 394361723985502097, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
       propertyPath: m_Material
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616121440772372245, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
+      propertyPath: normalMaterial
+      value: 
+      objectReference: {fileID: 6200000, guid: 935dff12d186b044a86ef255be37fd49, type: 2}
+    - target: {fileID: 2616121440772372245, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
+      propertyPath: slipperyMaterial
+      value: 
       objectReference: {fileID: 6200000, guid: 31ab9bb1a9703444b94a8ae987ac0456, type: 2}
     - target: {fileID: 3468264754153633250, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
       propertyPath: m_Enabled
@@ -10700,7 +10716,7 @@ PrefabInstance:
     - target: {fileID: 5194613622897247852, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 6200000, guid: 31ab9bb1a9703444b94a8ae987ac0456, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 6109678849186555304, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.37
