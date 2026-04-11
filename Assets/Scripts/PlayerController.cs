@@ -2,6 +2,7 @@ using ChristinaCreatesGames.Animations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float boostedJumpForce = 5f;
     [SerializeField] private Animator animator;
     [SerializeField] private AudioClip bounceSound;
+    [SerializeField] private PhysicsMaterial2D normalMaterial;
+    [SerializeField] private PhysicsMaterial2D slipperyMaterial;
+    private Collider2D col2D;
 
     private AudioSource audioSource;
     [HideInInspector] public Rigidbody2D rb;
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        col2D = GetComponent<Collider2D>();
         squashAndStretch = GetComponent<ChristinaCreatesGames.Animations.SquashAndStretch>();
         audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -135,13 +140,19 @@ public class PlayerController : MonoBehaviour
     void DisableDisintegrating()
     {
         if (disintegratingTarget != null)
+        {
+            if (isGrounded && groundContactCount > 0)
+                groundContactCount = Mathf.Max(0, groundContactCount - 1);
             disintegratingTarget.SetActive(false);
+            disintegratingTarget = null;
+        }
+            
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Disintegrating"))
-        {
+        if (col.gameObject.CompareTag("Platform"))
+        { 
             groundContactCount++;
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsRunning", false);
@@ -164,10 +175,14 @@ public class PlayerController : MonoBehaviour
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
+            col2D.sharedMaterial = slipperyMaterial;
+            rb.sharedMaterial = slipperyMaterial;
             float topEdge = col.transform.position.y + col.transform.localScale.y / 2;
             float sheepBottom = transform.position.y - transform.localScale.y / 2;
             if (sheepBottom >= topEdge - 0.1f)
             {
+                groundContactCount++;
+                animator.SetBool("IsJumping", false);
                 disintegratingTarget = col.gameObject;
                 Invoke("DisableDisintegrating", 0.8f);
             }
@@ -176,10 +191,18 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Disintegrating"))
+        if (col.gameObject.CompareTag("Platform"))
             groundContactCount = Mathf.Max(0, groundContactCount - 1);
 
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Disintegrating"))
+        {
+            if (col.game)
+            groundContactCount = Mathf.Max(0, groundContactCount - 1);
+            col2D.sharedMaterial = normalMaterial;
+            rb.sharedMaterial = normalMaterial;
+        }
+
+            if (col.gameObject.CompareTag("Player"))
         {
             if (transform.position.y > col.transform.position.y)
             {
