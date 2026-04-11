@@ -196,13 +196,15 @@ public class PlayerController : MonoBehaviour
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
-            if (col.game)
-            groundContactCount = Mathf.Max(0, groundContactCount - 1);
+            if (col.gameObject.activeSelf) // only decrement if block is still active
+            {
+                groundContactCount = Mathf.Max(0, groundContactCount - 1);
+            }
             col2D.sharedMaterial = normalMaterial;
             rb.sharedMaterial = normalMaterial;
         }
 
-            if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player"))
         {
             if (transform.position.y > col.transform.position.y)
             {
