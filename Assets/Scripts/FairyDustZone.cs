@@ -25,7 +25,11 @@ public class FairyDustZone : MonoBehaviour
         if (zoneActive)
         {
             foreach (Rigidbody2D rb in playersInside)
+            {
+                Debug.Log("Applying force to:" + rb.gameObject.name);
                 rb.AddForce(Vector2.up * upwardForce);
+            }
+            
         }
 
     }
