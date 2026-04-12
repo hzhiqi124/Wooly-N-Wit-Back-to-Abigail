@@ -69,6 +69,11 @@ public class PlayerController : MonoBehaviour
 
             if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
                 Jump();
+
+            if (Keyboard.current.upArrowKey.isPressed && !isGrounded && rb.linearVelocity.y < 0)
+                rb.gravityScale = 0.2f;
+            else
+                rb.gravityScale = 0.7f;
         }
 
         // follow grabbed object
@@ -170,7 +175,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool canGrab = false;
-   
+  
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform"))
