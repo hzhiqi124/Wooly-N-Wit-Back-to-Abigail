@@ -8,6 +8,7 @@ public class FairyDustZone : MonoBehaviour
     [SerializeField] private float forceInterval = 2f;
     [SerializeField] private float particleDuration = 0.5f;
     [SerializeField] private ParticleSystem fairyDust;
+    [SerializeField] private GameObject wooly;
 
     private float timer = 0f;
     private bool zoneActive = false;
@@ -45,13 +46,13 @@ public class FairyDustZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.gameObject == wooly)
             playersInside.Add(collision.GetComponent<Rigidbody2D>());
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.gameObject == wooly)
             playersInside.Remove(collision.GetComponent<Rigidbody2D>());
     }
 }

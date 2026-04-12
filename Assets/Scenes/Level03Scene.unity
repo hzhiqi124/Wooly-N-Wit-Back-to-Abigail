@@ -2159,6 +2159,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
+      propertyPath: wooly
+      value: 
+      objectReference: {fileID: 1876642700}
+    - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: upwardForce
       value: 3
       objectReference: {fileID: 0}
@@ -10020,6 +10024,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
+--- !u!1 &1876642700 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8690063128277127958, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
+  m_PrefabInstance: {fileID: 1876642699}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1900067773
 GameObject:
   m_ObjectHideFlags: 0
@@ -10390,6 +10399,7 @@ MonoBehaviour:
   forceInterval: 4
   particleDuration: 4
   fairyDust: {fileID: 187614273}
+  wooly: {fileID: 1876642700}
 --- !u!212 &1941741930
 SpriteRenderer:
   serializedVersion: 2
