@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerLevel4 : MonoBehaviour
 {
     public enum ControlScheme { WASD, Arrows }
     [SerializeField] private ControlScheme controlScheme;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     private int groundContactCount = 0;
     private bool isGrounded => groundContactCount > 0;
-    public bool onOtherSheep;
+    private bool onOtherSheep;
     private float moveInput;
     private SquashAndStretch squashAndStretch;
     private Vector3 rideOffset;
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour
 
         if (controlScheme == ControlScheme.WASD)
         {
-            if (col.transform.position.y > transform.position.y && !col.gameObject.CompareTag("Player"))
+            if (col.transform.position.y > transform.position.y)
             {
                 canGrab = true;
                 grabbedTransform = col.transform;
