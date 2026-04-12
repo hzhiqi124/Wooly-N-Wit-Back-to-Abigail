@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour
     private GameObject disintegratingTarget;
 
     public bool isBeingRidden;
+    private bool isGrabbing = false;
+    private Rigidbody2D grabbedObject;
+    private Vector3 grabOffset;
 
     void Start()
     {
@@ -49,10 +52,16 @@ public class PlayerController : MonoBehaviour
             else if (Keyboard.current.dKey.isPressed) moveInput = 1;
             else moveInput = 0;
 
-            if (Keyboard.current.wKey.wasPressedThisFrame && isGrounded)
+            if (Keyboard.current.wKey.wasPressedThisFrame && isGrounded && !isGrabbing)
                 Jump();
+
+            if (Keyboard.current.wKey.isPressed && canGrab)
+                StartGrab();
+
+            if (Keyboard.current.wKey.wasReleasedThisFrame)
+                StopGrab();
         }
-        else
+        else if (controlScheme == ControlScheme.Arrows)
         {
             if (Keyboard.current.leftArrowKey.isPressed) moveInput = -1;
             else if (Keyboard.current.rightArrowKey.isPressed) moveInput = 1;
@@ -60,6 +69,17 @@ public class PlayerController : MonoBehaviour
 
             if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
                 Jump();
+        }
+
+        // follow grabbed object
+        if (isGrabbing && grabbedTransform != null)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.linearVelocity = Vector2.zero;
+            transform.position = new Vector3(
+                grabbedTransform.position.x + grabOffset.x,
+                grabbedTransform.position.y + grabOffset.y,
+                transform.position.z);
         }
 
         if (moveInput != 0)
@@ -89,7 +109,7 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
-        else if (rb.bodyType == RigidbodyType2D.Kinematic)
+        else if (rb.bodyType == RigidbodyType2D.Kinematic && !isGrabbing && ridingTarget == null)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
@@ -149,6 +169,8 @@ public class PlayerController : MonoBehaviour
             
     }
 
+    private bool canGrab = false;
+   
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform"))
@@ -187,6 +209,17 @@ public class PlayerController : MonoBehaviour
                 Invoke("DisableDisintegrating", 0.8f);
             }
         }
+
+        if (controlScheme == ControlScheme.WASD)
+        {
+            if (col.transform.position.y > transform.position.y)
+            {
+                canGrab = true;
+                grabbedTransform = col.transform;
+                grabOffset = transform.position - col.transform.position;
+                Debug.Log("canGrab set to true, object: " + col.gameObject.name);
+            }
+        }
     }
 
     void OnCollisionExit2D(Collision2D col)
@@ -214,5 +247,28 @@ public class PlayerController : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Dynamic;
             }
         }
+
+        if (controlScheme == ControlScheme.WASD)
+        {
+            canGrab = false;
+            if (!isGrabbing)
+                grabbedTransform = null;
+        }
+    }
+
+    private Transform grabbedTransform;
+    void StartGrab()
+    {
+        if (canGrab)
+        {
+            isGrabbing = true;
+        }
+    }
+
+    void StopGrab()
+    {
+        isGrabbing = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        grabbedTransform = null;
     }
 }
