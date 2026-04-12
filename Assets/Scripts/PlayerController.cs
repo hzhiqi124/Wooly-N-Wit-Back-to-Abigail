@@ -217,16 +217,19 @@ public class PlayerController : MonoBehaviour
 
         if (controlScheme == ControlScheme.WASD && !col.gameObject.CompareTag("Player"))
         {
-            float witTop = transform.position.y + transform.localScale.y / 2;
-            float objectBottom = col.transform.position.y - col.transform.localScale.y / 2;
-            if (witTop >= objectBottom - 0.1f && witTop <= objectBottom + 0.1f)
+            foreach (ContactPoint2D contact in col.contacts)
             {
-                canGrab = true;
-                grabbedTransform = col.transform;
-                grabOffset = transform.position - col.transform.position;
-                Debug.Log("canGrab set to true, object: " + col.gameObject.name);
+                if (contact.normal.y < -0.5f) // normal points downward = hit from below
+                {
+                    canGrab = true;
+                    grabbedTransform = col.transform;
+                    grabOffset = transform.position - col.transform.position;
+                    Debug.Log("canGrab set to true, object: " + col.gameObject.name);
+                    break;
+                }
             }
         }
+
     }
 
     void OnCollisionExit2D(Collision2D col)
