@@ -6,7 +6,7 @@ public class FairyDustZone : MonoBehaviour
 {
     [SerializeField] private float upwardForce = 0.5f;
     [SerializeField] private float forceInterval = 2f;
-    [SerializeField] private float particleDuration = 0.5f;
+    [SerializeField] private float particleDuration = 4f;
     [SerializeField] private ParticleSystem fairyDust;
     [SerializeField] private GameObject wooly;
 
@@ -17,28 +17,25 @@ public class FairyDustZone : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= forceInterval)
+        if (timer >= forceInterval && !zoneActive)
         {
             timer = 0f;
-            Debug.Log("Timer fired, starting coroutine");
             StartCoroutine(ActivateZone());
         }
 
         if (zoneActive)
         {
-            Debug.Log("Zone active, players inside: " + playersInside.Count);
-            foreach (Rigidbody2D rb in playersInside)
+            foreach (GameObject player in playersInside)
             {
-                Debug.Log("Applying force to: " + rb.gameObject.name + " rb null? " + (rb == null));
-                rb.AddForce(Vector2.up * upwardForce);
+                Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+                if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
+                    rb.AddForce(Vector2.up * upwardForce);
             }
         }
-
     }
 
     IEnumerator ActivateZone()
     {
-        Debug.Log("ActivateZone called");
         zoneActive = true;
         fairyDust.Clear();
         fairyDust.Play();
@@ -50,16 +47,12 @@ public class FairyDustZone : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject == wooly)
-            playersInside.Add(collision.GetComponent<Rigidbody2D>());
+            playersInside.Add(collision.gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Something exited zone: " + collision.gameObject.name);
         if (collision.gameObject == wooly)
-        {
-            Debug.Log("Wooly exited zone");
-            playersInside.Remove(collision.GetComponent<Rigidbody2D>());
-        }
+            playersInside.Remove(collision.gameObject);
     }
 }
