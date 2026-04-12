@@ -9394,6 +9394,18 @@ PrefabInstance:
       value: Particle System
       objectReference: {fileID: 0}
     - target: {fileID: 2520581967149954056, guid: 6cd73beb00ca2b24e8bc4afee4cab99c, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520581967149954056, guid: 6cd73beb00ca2b24e8bc4afee4cab99c, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520581967149954056, guid: 6cd73beb00ca2b24e8bc4afee4cab99c, type: 3}
+      propertyPath: lengthInSec
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520581967149954056, guid: 6cd73beb00ca2b24e8bc4afee4cab99c, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.03
       objectReference: {fileID: 0}
