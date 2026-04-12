@@ -11,6 +11,7 @@ public class PlayerControllerLevel4 : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float boostedJumpForce = 5f;
+    [SerializeField] private float floatSpeed = 2f;
     [SerializeField] private Animator animator;
     [SerializeField] private AudioClip bounceSound;
     [SerializeField] private PhysicsMaterial2D normalMaterial;
@@ -21,7 +22,7 @@ public class PlayerControllerLevel4 : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     private int groundContactCount = 0;
     private bool isGrounded => groundContactCount > 0;
-    private bool onOtherSheep;
+    public bool onOtherSheep;
     private float moveInput;
     private SquashAndStretch squashAndStretch;
     private Vector3 rideOffset;
@@ -32,8 +33,9 @@ public class PlayerControllerLevel4 : MonoBehaviour
 
     public bool isBeingRidden;
     private bool isGrabbing = false;
-    private Rigidbody2D grabbedObject;
     private Vector3 grabOffset;
+    private bool canGrab = false;
+    private Transform grabbedTransform;
 
     void Start()
     {
@@ -72,7 +74,7 @@ public class PlayerControllerLevel4 : MonoBehaviour
 
             if (Keyboard.current.upArrowKey.isPressed && !isGrounded && rb.linearVelocity.y < 0)
                 rb.gravityScale = 0.2f;
-            else
+            else if (!Keyboard.current.upArrowKey.isPressed)
                 rb.gravityScale = 0.7f;
         }
 
@@ -85,6 +87,19 @@ public class PlayerControllerLevel4 : MonoBehaviour
                 grabbedTransform.position.x + grabOffset.x,
                 grabbedTransform.position.y + grabOffset.y,
                 transform.position.z);
+
+            // if grabbing wooly, float both upward
+            if (grabbedTransform.CompareTag("Player"))
+            {
+                PlayerControllerLevel4 woolyController = grabbedTransform.GetComponent<PlayerControllerLevel4>();
+                if (woolyController != null)
+                {
+                    woolyController.rb.gravityScale = 0f;
+                    woolyController.rb.linearVelocity = new Vector2(
+                        woolyController.rb.linearVelocity.x,
+                        floatSpeed);
+                }
+            }
         }
 
         if (moveInput != 0)
@@ -148,8 +163,8 @@ public class PlayerControllerLevel4 : MonoBehaviour
 
     Rigidbody2D GetRider()
     {
-        PlayerController[] allPlayers = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
-        foreach (PlayerController p in allPlayers)
+        PlayerControllerLevel4[] allPlayers = FindObjectsByType<PlayerControllerLevel4>(FindObjectsSortMode.None);
+        foreach (PlayerControllerLevel4 p in allPlayers)
         {
             if (p.ridingTarget == this.transform)
             {
@@ -171,15 +186,12 @@ public class PlayerControllerLevel4 : MonoBehaviour
             disintegratingTarget.SetActive(false);
             disintegratingTarget = null;
         }
-            
     }
 
-    private bool canGrab = false;
-  
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform"))
-        { 
+        {
             groundContactCount++;
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsRunning", false);
@@ -215,14 +227,28 @@ public class PlayerControllerLevel4 : MonoBehaviour
             }
         }
 
-        if (controlScheme == ControlScheme.WASD)
+        if (controlScheme == ControlScheme.WASD && !col.gameObject.CompareTag("Player"))
+        {
+            foreach (ContactPoint2D contact in col.contacts)
+            {
+                if (contact.normal.y < -0.5f)
+                {
+                    canGrab = true;
+                    grabbedTransform = col.transform;
+                    grabOffset = transform.position - col.transform.position;
+                    break;
+                }
+            }
+        }
+
+        // allow grabbing onto wooly
+        if (controlScheme == ControlScheme.WASD && col.gameObject.CompareTag("Player"))
         {
             if (col.transform.position.y > transform.position.y)
             {
                 canGrab = true;
                 grabbedTransform = col.transform;
                 grabOffset = transform.position - col.transform.position;
-                Debug.Log("canGrab set to true, object: " + col.gameObject.name);
             }
         }
     }
@@ -234,10 +260,8 @@ public class PlayerControllerLevel4 : MonoBehaviour
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
-            if (col.gameObject.activeSelf) // only decrement if block is still active
-            {
+            if (col.gameObject.activeSelf)
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
-            }
             col2D.sharedMaterial = normalMaterial;
             rb.sharedMaterial = normalMaterial;
         }
@@ -261,19 +285,24 @@ public class PlayerControllerLevel4 : MonoBehaviour
         }
     }
 
-    private Transform grabbedTransform;
     void StartGrab()
     {
         if (canGrab)
-        {
             isGrabbing = true;
-        }
     }
 
     void StopGrab()
     {
         isGrabbing = false;
         rb.bodyType = RigidbodyType2D.Dynamic;
+
+        if (grabbedTransform != null && grabbedTransform.CompareTag("Player"))
+        {
+            PlayerControllerLevel4 woolyController = grabbedTransform.GetComponent<PlayerControllerLevel4>();
+            if (woolyController != null)
+                woolyController.rb.gravityScale = 0.7f;
+        }
+
         grabbedTransform = null;
     }
 }
