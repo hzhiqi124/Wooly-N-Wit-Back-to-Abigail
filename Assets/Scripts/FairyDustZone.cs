@@ -12,7 +12,7 @@ public class FairyDustZone : MonoBehaviour
 
     private float timer = 0f;
     private bool zoneActive = false;
-    private List<Rigidbody2D> playersInside = new List<Rigidbody2D>();
+    private List<GameObject> playersInside = new List<GameObject>();
 
     private void Update()
     {
@@ -20,27 +20,30 @@ public class FairyDustZone : MonoBehaviour
         if (timer >= forceInterval)
         {
             timer = 0f;
+            Debug.Log("Timer fired, starting coroutine");
             StartCoroutine(ActivateZone());
         }
 
         if (zoneActive)
         {
+            Debug.Log("Zone active, players inside: " + playersInside.Count);
             foreach (Rigidbody2D rb in playersInside)
             {
-                Debug.Log("Applying force to:" + rb.gameObject.name);
+                Debug.Log("Applying force to: " + rb.gameObject.name + " rb null? " + (rb == null));
                 rb.AddForce(Vector2.up * upwardForce);
             }
-            
         }
 
     }
 
     IEnumerator ActivateZone()
     {
+        Debug.Log("ActivateZone called");
         zoneActive = true;
+        fairyDust.Clear();
         fairyDust.Play();
         yield return new WaitForSeconds(particleDuration);
-        fairyDust.Stop();
+        fairyDust.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         zoneActive = false;
     }
 
@@ -52,7 +55,11 @@ public class FairyDustZone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Debug.Log("Something exited zone: " + collision.gameObject.name);
         if (collision.gameObject == wooly)
+        {
+            Debug.Log("Wooly exited zone");
             playersInside.Remove(collision.GetComponent<Rigidbody2D>());
+        }
     }
 }
