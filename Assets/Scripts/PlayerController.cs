@@ -215,9 +215,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (controlScheme == ControlScheme.WASD)
+        if (controlScheme == ControlScheme.WASD && !col.gameObject.CompareTag("Player"))
         {
-            if (col.transform.position.y > transform.position.y && !col.gameObject.CompareTag("Player"))
+            float witTop = transform.position.y + transform.localScale.y / 2;
+            float objectBottom = col.transform.position.y - col.transform.localScale.y / 2;
+            if (witTop >= objectBottom - 0.1f && witTop <= objectBottom + 0.1f)
             {
                 canGrab = true;
                 grabbedTransform = col.transform;
