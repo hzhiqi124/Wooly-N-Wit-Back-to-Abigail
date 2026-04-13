@@ -5991,13 +5991,13 @@ MonoBehaviour:
   smoothSpeed: 5
   offset: {x: 0, y: 2, z: 0}
   minX: -5
-  maxX: 42
+  maxX: 50
   minY: -4
-  maxY: 20
-  defaultZ: -10
-  maxZoomOut: -20
-  zoomThreshold: 5
-  zoomSpeed: 2
+  maxY: 25
+  defaultZ: -15
+  maxZoomOut: -40
+  zoomThreshold: 8
+  zoomSpeed: 8
 --- !u!82 &519420034
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14386,7 +14386,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 945702264057483873, guid: 9a5acc3108d6afb40be020b56cad5d4f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2151303186337687065, guid: 9a5acc3108d6afb40be020b56cad5d4f, type: 3}
       propertyPath: m_LocalScale.x
