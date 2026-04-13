@@ -3349,7 +3349,7 @@ Transform:
   m_GameObject: {fileID: 336564805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: -8.54, y: 47.51, z: 0.07955}
+  m_LocalPosition: {x: -9.27, y: 47.51, z: 0.07955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3660,7 +3660,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: c6c0450a7712bdb4ba8102a839c1e022, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4639,7 +4639,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4860,7 +4860,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.3254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6046,7 +6046,7 @@ Transform:
   m_GameObject: {fileID: 626687156}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.92444426, w: 0.3813172}
-  m_LocalPosition: {x: 0.07229996, y: -0.61181974, z: 0}
+  m_LocalPosition: {x: -0.2, y: -0.48, z: 0}
   m_LocalScale: {x: 0.12624684, y: 0.12624684, z: 0.12624682}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8348,7 +8348,7 @@ Transform:
   m_GameObject: {fileID: 880668129}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.29502448, w: 0.95548975}
-  m_LocalPosition: {x: 0.14229989, y: 0.21818018, z: 0}
+  m_LocalPosition: {x: -0.2, y: 0.2, z: 0}
   m_LocalScale: {x: 0.12624682, y: 0.12624682, z: 0.12624682}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9568,10 +9568,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 16
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.56078434}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2509804}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -13303,7 +13303,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 74776b9d4395be244834f34438ceba27, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17433,10 +17433,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 17
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.54509807}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.4392157}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -49616,7 +49616,7 @@ Transform:
   m_GameObject: {fileID: 1863273766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: -8.261089, y: 50.22908, z: 0.07955}
+  m_LocalPosition: {x: -9.96, y: 58.7, z: 0.07955}
   m_LocalScale: {x: 1.4994, y: 1.4994, z: 1.4994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51322,6 +51322,22 @@ PrefabInstance:
     - target: {fileID: 1642059857115969864, guid: 2ce7acb12f579924fa9147908d26fd04, type: 3}
       propertyPath: m_Name
       value: Abyss (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409052556876023305, guid: 2ce7acb12f579924fa9147908d26fd04, type: 3}
+      propertyPath: m_Size.x
+      value: 0.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409052556876023305, guid: 2ce7acb12f579924fa9147908d26fd04, type: 3}
+      propertyPath: m_Size.y
+      value: 0.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409052556876023305, guid: 2ce7acb12f579924fa9147908d26fd04, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3409052556876023305, guid: 2ce7acb12f579924fa9147908d26fd04, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
