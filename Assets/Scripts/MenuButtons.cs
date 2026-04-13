@@ -4,7 +4,7 @@ public class MenuButtons : MonoBehaviour
 {
     public void OnStartClicked()
     {
-        SceneController.instance.LoadScene("Level01Scene");
+        SceneController.instance.LoadScene("TutorialScene");
     }
 
     public void OnQuitClicked()
