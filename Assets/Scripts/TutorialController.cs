@@ -7,6 +7,7 @@ public class TutorialController : MonoBehaviour
 
     void Start()
     {
+        MusicManager.instance.FadeOutAndStop(2f);
         StartCoroutine(LoadNextScene());
     }
 
