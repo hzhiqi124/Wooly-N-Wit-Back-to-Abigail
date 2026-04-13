@@ -49,7 +49,7 @@ public class EndingCameraController : MonoBehaviour
 
     IEnumerator PauseAndFadeOut()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         blueCanvas.SetActive(true);
         CanvasGroup blueCanvasGroup = blueCanvas.GetComponent<CanvasGroup>();
@@ -65,6 +65,8 @@ public class EndingCameraController : MonoBehaviour
         }
         blueCanvasGroup.alpha = 1f;
 
-        SceneManager.LoadSceneAsync("MenuScene");
+        // wait for menu scene to load before destroying this camera
+        AsyncOperation load = SceneManager.LoadSceneAsync("MenuScene");
+        yield return load;
     }
 }
