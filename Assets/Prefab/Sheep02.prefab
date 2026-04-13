@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3739957133524300147, guid: 281c20e681dddc040a759d60943a8f65, type: 3}
+  m_Sprite: {fileID: -3739957133524300147, guid: 6625338083cdc2e45837d682a0634de1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -347,7 +347,11 @@ MonoBehaviour:
   boostedJumpForce: 5.5
   animator: {fileID: 9152657373793070500}
   bounceSound: {fileID: 8300000, guid: 49a0ae645702b59419dacfdaf4307ee4, type: 3}
+  normalMaterial: {fileID: 0}
+  slipperyMaterial: {fileID: 0}
   rb: {fileID: 0}
+  onOtherSheep: 0
+  ridingTarget: {fileID: 0}
   isBeingRidden: 0
 --- !u!95 &9152657373793070500
 Animator:
@@ -359,7 +363,7 @@ Animator:
   m_GameObject: {fileID: 8690063128277127958}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d03dd92de1958854da7dfeb642b2f07b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 76050d9b5e3102d43b09e26337f11d9f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -565,7 +569,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 18.61, y: 15.34}
+    oldSize: {x: 19.279999, y: 14.51}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
