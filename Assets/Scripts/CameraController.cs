@@ -13,6 +13,12 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float minY;
     [SerializeField] private float maxY;
 
+    [Header("Zoom Settings")]
+    [SerializeField] private float defaultZ = -10f;
+    [SerializeField] private float maxZoomOut = -20f;
+    [SerializeField] private float zoomThreshold = 5f;
+    [SerializeField] private float zoomSpeed = 2f;
+
     void LateUpdate()
     {
         Vector3 centerPoint = (sheep01.position + sheep02.position) / 2;
@@ -20,7 +26,17 @@ public class CameraController : MonoBehaviour
 
         targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
         targetPosition.y = Mathf.Clamp(targetPosition.y, minY, maxY);
-        targetPosition.z = transform.position.z;
+
+        // calculate distance between sheep
+        float distance = Vector2.Distance(sheep01.position, sheep02.position);
+
+        // zoom out if sheep are far apart
+        float targetZ = defaultZ;
+        if (distance > zoomThreshold)
+            targetZ = Mathf.Lerp(defaultZ, maxZoomOut, (distance - zoomThreshold) / zoomThreshold);
+
+        targetZ = Mathf.Clamp(targetZ, maxZoomOut, defaultZ);
+        targetPosition.z = Mathf.Lerp(transform.position.z, targetZ, zoomSpeed * Time.deltaTime);
 
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }
