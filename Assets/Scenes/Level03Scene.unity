@@ -3536,7 +3536,7 @@ PrefabInstance:
       objectReference: {fileID: 1876642700}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: upwardForce
-      value: 3
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: forceInterval
