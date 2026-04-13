@@ -8,6 +8,7 @@ public class MenuCameraController : MonoBehaviour
     [SerializeField] private float minY;
     [SerializeField] private float slowDownDistance = 3f;
     [SerializeField] private GameObject titleUI;
+    [SerializeField] private GameObject titleUI02;
     [SerializeField] private GameObject buttonsUI;
     [SerializeField] private float titleDelay = 5f;
     [SerializeField] private float fadeDuration = 1f;
@@ -20,6 +21,7 @@ public class MenuCameraController : MonoBehaviour
     void Start()
     {
         titleUI.SetActive(true);
+        titleUI02.SetActive(true);
         buttonsUI.SetActive(true);
         titleCanvasGroup = titleUI.GetComponent<CanvasGroup>();
         titleCanvasGroup.alpha = 0f;
@@ -50,8 +52,10 @@ public class MenuCameraController : MonoBehaviour
             {
                 titleActivated = true;
                 titleUI.SetActive(true);
+                titleUI02.SetActive(true);
                 buttonsUI.SetActive(true);
                 titleUI.GetComponent<SquashAndStretch>().PlaySquashAndStretch();
+                titleUI02.GetComponent<SquashAndStretch>().PlaySquashAndStretch();
                 StartCoroutine(FadeIn(titleCanvasGroup, 0f));
                 StartCoroutine(FadeIn(buttonsCanvasGroup, 2f));
             }
