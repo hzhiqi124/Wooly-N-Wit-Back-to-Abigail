@@ -7,6 +7,7 @@ public class Star : MonoBehaviour
     [SerializeField] AudioClip starSound;
     [SerializeField] public GameObject Tutorial01;
     [SerializeField] public GameObject Tutorial02;
+    [SerializeField] public GameObject particleEffect; 
 
     private AudioSource audioSource;
 
@@ -24,6 +25,7 @@ public class Star : MonoBehaviour
             lightWall.SetActive(true);
             Invoke("DisableStar", 0.5f);
             Invoke("EnableTutorial", 0.5f);
+            particleEffect.SetActive(true);
             
         }
     }
