@@ -171,15 +171,15 @@ public class PlayerController : MonoBehaviour
             disintegratingTarget.SetActive(false);
             disintegratingTarget = null;
         }
-            
+
     }
 
     private bool canGrab = false;
-  
+
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform"))
-        { 
+        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
+        {
             groundContactCount++;
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsRunning", false);
@@ -215,7 +215,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (controlScheme == ControlScheme.WASD && !col.gameObject.CompareTag("Player"))
+        if (controlScheme == ControlScheme.WASD && col.gameObject.CompareTag("Lantern"))
         {
             foreach (ContactPoint2D contact in col.contacts)
             {
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Platform"))
+        if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
             groundContactCount = Mathf.Max(0, groundContactCount - 1);
 
         if (col.gameObject.CompareTag("Disintegrating"))
@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (controlScheme == ControlScheme.WASD)
+        if (controlScheme == ControlScheme.WASD && col.gameObject.CompareTag("Lantern"))
         {
             canGrab = false;
             if (!isGrabbing)
