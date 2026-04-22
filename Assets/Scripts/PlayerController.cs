@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     private int groundContactCount = 0;
     private bool isGrounded => groundContactCount > 0;
+    private bool isTouchingWall = false;
     public bool onOtherSheep;
     private float moveInput;
     private SquashAndStretch squashAndStretch;
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public bool isBeingRidden;
     private bool isGrabbing = false;
     private Vector3 grabOffset;
+    private bool canGrab = false;
+    private Transform grabbedTransform;
 
     void Start()
     {
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviour
             else if (Keyboard.current.dKey.isPressed) moveInput = 1;
             else moveInput = 0;
 
-            if (Keyboard.current.wKey.wasPressedThisFrame && isGrounded && !isGrabbing)
+            if (Keyboard.current.wKey.wasPressedThisFrame && (isGrounded || isTouchingWall) && !isGrabbing)
                 Jump();
 
             if (Keyboard.current.wKey.isPressed && canGrab)
@@ -66,7 +69,7 @@ public class PlayerController : MonoBehaviour
             else if (Keyboard.current.rightArrowKey.isPressed) moveInput = 1;
             else moveInput = 0;
 
-            if (Keyboard.current.upArrowKey.wasPressedThisFrame && isGrounded)
+            if (Keyboard.current.upArrowKey.wasPressedThisFrame && (isGrounded || isTouchingWall))
                 Jump();
 
             if (Keyboard.current.upArrowKey.isPressed && !isGrounded && rb.linearVelocity.y < 0)
@@ -120,14 +123,13 @@ public class PlayerController : MonoBehaviour
 
         // safety reset if stuck as grounded while in the air
         if (groundContactCount > 0 && rb.linearVelocity.y > 2f)
-        {
             groundContactCount = 0;
-        }
     }
 
     void Jump()
     {
         groundContactCount = 0;
+        isTouchingWall = false;
         animator.SetBool("IsJumping", true);
         rb.bodyType = RigidbodyType2D.Dynamic;
         float force = onOtherSheep ? boostedJumpForce : jumpForce;
@@ -176,18 +178,26 @@ public class PlayerController : MonoBehaviour
             disintegratingTarget.SetActive(false);
             disintegratingTarget = null;
         }
-
     }
-
-    private bool canGrab = false;
 
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
         {
-            groundContactCount++;
-            animator.SetBool("IsJumping", false);
-            animator.SetBool("IsRunning", false);
+            foreach (ContactPoint2D contact in col.contacts)
+            {
+                if (contact.normal.y > 0.5f)
+                {
+                    groundContactCount++;
+                    animator.SetBool("IsJumping", false);
+                    animator.SetBool("IsRunning", false);
+                    break;
+                }
+                else if (Mathf.Abs(contact.normal.x) > 0.5f)
+                {
+                    isTouchingWall = true;
+                }
+            }
         }
 
         if (col.gameObject.CompareTag("Player") && !isGrounded)
@@ -224,30 +234,29 @@ public class PlayerController : MonoBehaviour
         {
             foreach (ContactPoint2D contact in col.contacts)
             {
-                if (contact.normal.y < -0.5f) // normal points downward = hit from below
+                if (contact.normal.y < -0.5f)
                 {
                     canGrab = true;
                     grabbedTransform = col.transform;
                     grabOffset = transform.position - col.transform.position;
-                    Debug.Log("canGrab set to true, object: " + col.gameObject.name);
                     break;
                 }
             }
         }
-
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
+        {
             groundContactCount = Mathf.Max(0, groundContactCount - 1);
+            isTouchingWall = false;
+        }
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
-            if (col.gameObject.activeSelf) // only decrement if block is still active
-            {
+            if (col.gameObject.activeSelf)
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
-            }
             col2D.sharedMaterial = normalMaterial;
             rb.sharedMaterial = normalMaterial;
         }
@@ -271,13 +280,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private Transform grabbedTransform;
     void StartGrab()
     {
         if (canGrab)
-        {
             isGrabbing = true;
-        }
     }
 
     void StopGrab()
