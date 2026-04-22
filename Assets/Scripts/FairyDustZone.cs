@@ -28,6 +28,7 @@ public class FairyDustZone : MonoBehaviour
             foreach (GameObject player in playersInside)
             {
                 Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+                Debug.Log("Wooly rb null: " + (rb == null) + " bodyType: " + rb.bodyType);
                 if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
                     rb.AddForce(Vector2.up * upwardForce);
             }

@@ -4525,7 +4525,7 @@ PrefabInstance:
       objectReference: {fileID: 1876642700}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: upwardForce
-      value: 1.5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: forceInterval
@@ -23045,7 +23045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 682e378bd21e41c4a969ae46272163ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FairyDustZone
-  upwardForce: 3
+  upwardForce: 8
   forceInterval: 8
   particleDuration: 4
   fairyDust: {fileID: 187614273}
