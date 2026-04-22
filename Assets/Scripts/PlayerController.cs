@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
 
     public bool isBeingRidden;
     private bool isGrabbing = false;
-    private Rigidbody2D grabbedObject;
     private Vector3 grabOffset;
 
     void Start()
@@ -117,6 +116,12 @@ public class PlayerController : MonoBehaviour
         else if (rb.bodyType == RigidbodyType2D.Kinematic && !isGrabbing && ridingTarget == null)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
+        // safety reset if stuck as grounded while in the air
+        if (groundContactCount > 0 && rb.linearVelocity.y > 2f)
+        {
+            groundContactCount = 0;
         }
     }
 
