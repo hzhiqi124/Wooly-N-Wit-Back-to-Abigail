@@ -268,13 +268,11 @@ public class PlayerControllerLevel4 : MonoBehaviour
 
         if (col.gameObject.CompareTag("Player"))
         {
-            if (transform.position.y > col.transform.position.y)
-            {
+            if (onOtherSheep)
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
-                onOtherSheep = false;
-                ridingTarget = null;
-                rb.bodyType = RigidbodyType2D.Dynamic;
-            }
+            onOtherSheep = false;
+            ridingTarget = null;
+            rb.bodyType = RigidbodyType2D.Dynamic;
         }
 
         if (controlScheme == ControlScheme.WASD)

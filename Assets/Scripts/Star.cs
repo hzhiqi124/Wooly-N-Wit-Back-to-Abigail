@@ -7,6 +7,7 @@ public class Star : MonoBehaviour
     [SerializeField] AudioClip starSound;
     [SerializeField] public GameObject Tutorial01;
     [SerializeField] public GameObject Tutorial02;
+    [SerializeField] public GameObject Tutorial03;
     [SerializeField] public GameObject particleEffect; 
 
     private AudioSource audioSource;
@@ -39,5 +40,6 @@ public class Star : MonoBehaviour
     {
         Tutorial01.SetActive(true);
         Tutorial02.SetActive(true);
+        Tutorial03.SetActive(true);
     }
 }
