@@ -4114,11 +4114,11 @@ Transform:
   m_GameObject: {fileID: 409742024}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.89, y: 3.67, z: 0}
-  m_LocalScale: {x: 0.57733, y: 0.34493, z: 0.48270997}
+  m_LocalPosition: {x: 0.011494652, y: -0.020809297, z: 0}
+  m_LocalScale: {x: 0.6635977, y: 0.71775866, z: 0.48270997}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1930493710}
+  m_Father: {fileID: 1035781930}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &409742026
 SpriteRenderer:
@@ -7568,7 +7568,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8477534574588198629, guid: 7a6924273fb807e449041e7128ce4231, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 409742025}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a6924273fb807e449041e7128ce4231, type: 3}
 --- !u!1 &840587878
@@ -9977,7 +9980,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8477534574588198629, guid: 7a6924273fb807e449041e7128ce4231, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.56
+      value: 2.43
       objectReference: {fileID: 0}
     - target: {fileID: 8477534574588198629, guid: 7a6924273fb807e449041e7128ce4231, type: 3}
       propertyPath: m_LocalPosition.z
@@ -81061,7 +81064,6 @@ Transform:
   - {fileID: 1486213694}
   - {fileID: 132284836}
   - {fileID: 1035781930}
-  - {fileID: 409742025}
   - {fileID: 2145182477}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -83149,7 +83151,7 @@ PrefabInstance:
       objectReference: {fileID: 1238411099}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: upwardForce
-      value: 1.5
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3415996977608581012, guid: 847aed057961e8846899464d01f316f3, type: 3}
       propertyPath: forceInterval
@@ -83233,6 +83235,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5194613622897247852, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
+      propertyPath: m_GravityScale
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5413933058337749055, guid: e18c517eff8f2164fbba10aafe35028e, type: 3}
       propertyPath: m_SortingOrder
       value: 0
