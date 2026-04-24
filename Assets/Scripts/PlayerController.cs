@@ -54,12 +54,16 @@ public class PlayerController : MonoBehaviour
             else if (Keyboard.current.dKey.isPressed) moveInput = 1;
             else moveInput = 0;
 
-            if (Keyboard.current.wKey.wasPressedThisFrame && (isGrounded || isTouchingWall) && !isGrabbing)
-                Jump();
+            if (Keyboard.current.wKey.wasPressedThisFrame)
+            {
+                print("isGrounded:" + isGrounded + ", isTouchingWall: " + isTouchingWall + ", isGrabbing: " + isGrabbing);
+                if ((isGrounded || isTouchingWall) && !isGrabbing)
+                    Jump();
+            }
 
             if (Keyboard.current.wKey.isPressed && canGrab)
                 StartGrab();
-
+    
             if (Keyboard.current.wKey.wasReleasedThisFrame)
                 StopGrab();
         }
@@ -123,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
         // safety reset if stuck as grounded while in the air
         if (groundContactCount > 0 && rb.linearVelocity.y > 2f)
-            groundContactCount = 0;
+         groundContactCount = 0;
     }
 
     void Jump()
@@ -180,6 +184,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //check collision enter for different numbers, maybe upon collision one object doesnt add up
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
@@ -247,8 +252,10 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
+        int before = groundContactCount;
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
         {
+            Debug.Assert(groundContactCount > 0);
             groundContactCount = Mathf.Max(0, groundContactCount - 1);
             isTouchingWall = false;
         }
@@ -276,6 +283,7 @@ public class PlayerController : MonoBehaviour
             if (!isGrabbing)
                 grabbedTransform = null;
         }
+        print("Exiting " + col.gameObject.name + " before " + before + " after " + groundContactCount);
     }
 
     void StartGrab()
