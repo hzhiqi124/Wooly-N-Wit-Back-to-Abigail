@@ -1,4 +1,5 @@
 using ChristinaCreatesGames.Animations;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 grabOffset;
     private bool canGrab = false;
     private Transform grabbedTransform;
+    private HashSet<Collider2D> groundedColliders = new HashSet<Collider2D>();
 
     void Start()
     {
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
             if (Keyboard.current.wKey.isPressed && canGrab)
                 StartGrab();
-    
+
             if (Keyboard.current.wKey.wasReleasedThisFrame)
                 StopGrab();
         }
@@ -127,12 +129,13 @@ public class PlayerController : MonoBehaviour
 
         // safety reset if stuck as grounded while in the air
         if (groundContactCount > 0 && rb.linearVelocity.y > 2f)
-         groundContactCount = 0;
+            groundContactCount = 0;
     }
 
     void Jump()
     {
         groundContactCount = 0;
+        groundedColliders.Clear();
         isTouchingWall = false;
         animator.SetBool("IsJumping", true);
         rb.bodyType = RigidbodyType2D.Dynamic;
@@ -177,14 +180,17 @@ public class PlayerController : MonoBehaviour
     {
         if (disintegratingTarget != null)
         {
-            if (isGrounded && groundContactCount > 0)
+            Collider2D disCol = disintegratingTarget.GetComponent<Collider2D>();
+            if (disCol != null && groundedColliders.Contains(disCol))
+            {
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
+                groundedColliders.Remove(disCol);
+            }
             disintegratingTarget.SetActive(false);
             disintegratingTarget = null;
         }
     }
 
-    //check collision enter for different numbers, maybe upon collision one object doesnt add up
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
@@ -194,6 +200,7 @@ public class PlayerController : MonoBehaviour
                 if (contact.normal.y > 0.5f)
                 {
                     groundContactCount++;
+                    groundedColliders.Add(col.collider);
                     animator.SetBool("IsJumping", false);
                     animator.SetBool("IsRunning", false);
                     break;
@@ -205,11 +212,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (col.gameObject.CompareTag("Player") && !isGrounded)
+        if (col.gameObject.CompareTag("Player"))
         {
             if (transform.position.y > col.transform.position.y)
             {
                 groundContactCount++;
+                groundedColliders.Add(col.collider);
                 onOtherSheep = true;
 
                 if (moveInput == 0)
@@ -229,6 +237,7 @@ public class PlayerController : MonoBehaviour
             if (sheepBottom >= topEdge - 0.1f)
             {
                 groundContactCount++;
+                groundedColliders.Add(col.collider);
                 animator.SetBool("IsJumping", false);
                 disintegratingTarget = col.gameObject;
                 Invoke("DisableDisintegrating", 0.8f);
@@ -252,26 +261,37 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        int before = groundContactCount;
         if (col.gameObject.CompareTag("Platform") || col.gameObject.CompareTag("Lantern"))
         {
-            Debug.Assert(groundContactCount > 0);
-            groundContactCount = Mathf.Max(0, groundContactCount - 1);
+            if (groundedColliders.Contains(col.collider))
+            {
+                Debug.Assert(groundContactCount > 0, "groundContactCount underflow on Platform/Lantern exit");
+                groundContactCount = Mathf.Max(0, groundContactCount - 1);
+                groundedColliders.Remove(col.collider);
+            }
             isTouchingWall = false;
         }
 
         if (col.gameObject.CompareTag("Disintegrating"))
         {
-            if (col.gameObject.activeSelf)
+            if (groundedColliders.Contains(col.collider))
+            {
+                Debug.Assert(groundContactCount > 0, "groundContactCount underflow on Disintegrating exit");
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
+                groundedColliders.Remove(col.collider);
+            }
             col2D.sharedMaterial = normalMaterial;
             rb.sharedMaterial = normalMaterial;
         }
 
         if (col.gameObject.CompareTag("Player"))
         {
-            if (onOtherSheep)
+            if (groundedColliders.Contains(col.collider))
+            {
+                Debug.Assert(groundContactCount > 0, "groundContactCount underflow on Player exit");
                 groundContactCount = Mathf.Max(0, groundContactCount - 1);
+                groundedColliders.Remove(col.collider);
+            }
             onOtherSheep = false;
             ridingTarget = null;
             rb.bodyType = RigidbodyType2D.Dynamic;
@@ -283,7 +303,6 @@ public class PlayerController : MonoBehaviour
             if (!isGrabbing)
                 grabbedTransform = null;
         }
-        print("Exiting " + col.gameObject.name + " before " + before + " after " + groundContactCount);
     }
 
     void StartGrab()
